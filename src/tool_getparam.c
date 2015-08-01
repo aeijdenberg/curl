@@ -101,6 +101,7 @@ static const struct LongShort aliases[]= {
 #endif
   {"*q", "ftp-create-dirs",          FALSE},
   {"*r", "create-dirs",              FALSE},
+  {"*R", "require-ct",               FALSE},
   {"*s", "max-redirs",               TRUE},
   {"*t", "proxy-ntlm",               FALSE},
   {"*u", "crlf",                     FALSE},
@@ -654,6 +655,10 @@ ParameterError getparameter(char *flag,    /* f or -long-flag */
 
       case 'r': /* --create-dirs */
         config->create_dirs = toggle;
+        break;
+
+      case 'R': /* --require-ct*/
+        config->require_ct = 1;
         break;
 
       case 's': /* --max-redirs */

@@ -344,6 +344,7 @@ struct ssl_config_data {
   bool verifypeer;       /* set TRUE if this is desired */
   bool verifyhost;       /* set TRUE if CN/SAN must match hostname */
   bool verifystatus;     /* set TRUE if certificate status must be checked */
+  bool requirect;        /* set TRUE if certificate must have been publicly logged */
   char *CApath;          /* certificate dir (doesn't work on windows) */
   char *CAfile;          /* certificate to verify peer against */
   const char *CRLfile;   /* CRL to check certificate revocation */
@@ -1041,6 +1042,8 @@ struct connectdata {
 
   bool verifypeer;
   bool verifyhost;
+  bool requirect;
+  bool didcheckct;
 
   /* When this connection is created, store the conditions for the local end
      bind. This is stored before the actual bind and before any connection is

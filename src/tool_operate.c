@@ -1030,6 +1030,8 @@ static CURLcode operate_do(struct GlobalConfig *global,
           my_setopt_str(curl, CURLOPT_SSLKEY, config->key);
           my_setopt_str(curl, CURLOPT_SSLKEYTYPE, config->key_type);
 
+          my_setopt_str(curl, CURLOPT_SSL_REQUIRECT, config->require_ct);
+
           if(config->insecure_ok) {
             my_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
             my_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);

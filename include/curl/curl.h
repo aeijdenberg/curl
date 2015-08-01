@@ -1644,6 +1644,9 @@ typedef enum {
 
   /* Wait/don't wait for pipe/mutex to clarify */
   CINIT(PIPEWAIT, LONG, 237),
+  
+  /* Require CT data be present for cert */
+  CINIT(SSL_REQUIRECT, LONG, 238),
 
   CURLOPT_LASTENTRY /* the last unused */
 } CURLoption;

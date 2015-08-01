@@ -545,6 +545,7 @@ CURLcode Curl_init_userdefined(struct UserDefined *set)
    */
   set->ssl.verifypeer = TRUE;
   set->ssl.verifyhost = TRUE;
+  set->ssl.requirect = FALSE;
 #ifdef USE_TLS_SRP
   set->ssl.authtype = CURL_TLSAUTH_NONE;
 #endif
@@ -2009,6 +2010,12 @@ CURLcode Curl_setopt(struct SessionHandle *data, CURLoption option,
      * Enable peer SSL verifying.
      */
     data->set.ssl.verifypeer = (0 != va_arg(param, long))?TRUE:FALSE;
+    break;
+  case CURLOPT_SSL_REQUIRECT:
+    /*
+     * Enable requiring certificate transparency for cert.
+     */
+    data->set.ssl.requirect = (0 != va_arg(param, long))?TRUE:FALSE;
     break;
   case CURLOPT_SSL_VERIFYHOST:
     /*

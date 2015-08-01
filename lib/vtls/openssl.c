@@ -56,6 +56,7 @@
 #include <openssl/ssl.h>
 #include <openssl/rand.h>
 #include <openssl/x509v3.h>
+#include <openssl/ct.h>
 #include <openssl/dsa.h>
 #include <openssl/dh.h>
 #include <openssl/err.h>
@@ -1996,6 +1997,28 @@ static CURLcode ossl_connect_step1(struct connectdata *conn, int sockindex)
           "none",
           data->set.str[STRING_SSL_CAPATH] ? data->set.str[STRING_SSL_CAPATH]:
           "none");
+  }
+  else { /* if not explicitly set, just use the defaults! */
+    if(SSL_CTX_set_default_verify_paths(connssl->ctx) != 1) {
+      if(data->set.ssl.verifypeer) {
+        /* Fail if we insist on successfully verifying the server. */
+        failf(data, "error setting certificate verify locations using SSL_CTX_set_default_verify_paths.\n");
+        return CURLE_SSL_CACERT_BADFILE;
+      }
+      else {
+        /* Just continue with a warning if no strict  certificate verification
+           is required. */
+        infof(data, "error setting certificate verify locations,"
+              " continuing anyway:\n");
+      }
+    }
+  }
+  
+  if (data->set.ssl.requirect) {
+    if (SSL_CTX_apply_certificate_transparency_policy(connssl->ctx, CT_POLICY_REQUIRE_ONE) != 1) {
+      failf(data, "no ct for us.\n");
+      return CURLE_SSL_CACERT_BADFILE;
+    }
   }
 
   if(data->set.str[STRING_SSL_CRLFILE]) {
